@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style type="text/css">
+			html,
+			body {
+				padding: 0;
+				margin: 0;
+			}
+
+			body {
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+					"Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+				font-size: 12px;
+				background: #faf0ca;
+				color: #0d3b66;
+				padding: 1em;
+				height: 160px;
+				width: 380px;
+			}
+
+			header {
+				background: #f95738;
+				color: #faf0ca;
+				padding: 1em;
+				margin: -1em -1em 1em -1em;
+			}
+
+			header h1 {
+				font-size: 1.5em;
+				margin: 0;
+			}
+
+			a {
+				color: inherit;
+				text-decoration: none;
+			}
+
+			#candidates {
+				white-space: nowrap;
+				border-spacing: 0.5em;
+				margin: 1em -0.5em 0 -0.5em;
+			}
+
+			thead {
+				font-weight: bold;
+			}
+
+			td {
+				padding: 0;
+			}
+
+			tbody > tr {
+				cursor: pointer;
+			}
+
+			#candidates .name {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				max-width: 0;
+			}
+
+			#downloading span {
+				font-variant-numeric: tabular-nums lining-nums;
+			}
+
+			.progress {
+				margin: 1em 0;
+				background: #f4d35e;
+			}
+
+			.progress div {
+				height: 2em;
+				width: 0;
+				background: #f95738;
+			}
+
+			.align {
+				display: flex;
+				align-items: center;
+				align-content: center;
+			}
+
+			.status {
+				margin-left: 1em;
+				font-variant-numeric: tabular-nums lining-nums;
+			}
+
+			main > div {
+				display: none;
+			}
+
+			#serving input {
+				display: block;
+				width: 100%;
+				outline: none;
+				border: 0;
+				padding: 1em;
+				margin: 1em -1em;
+				color: inherit;
+				background: white;
+			}
+
+			button {
+				background: #f95738;
+				color: #faf0ca;
+				padding: 0.5em 1em;
+				font: inherit;
+				border: 0;
+				border-radius: 0;
+				cursor: pointer;
+			}
+
+			button:hover {
+				font-style: italic;
+			}
+		</style>
+	</head>
+	<body>
+		<header>
+			<h1>Together</h1>
+		</header>
+
+		<main>
+			<div id="ready">
+				Start playing the video you want to share and click the matching video below to start sharing.
+				<table id="candidates">
+					<colgroup>
+						<col width="100%" />
+						<col width="0%" />
+						<col width="0%" />
+					</colgroup>
+					<thead>
+						<tr>
+							<td>Name</td>
+							<td>Size</td>
+							<td>Opened</td>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<div id="downloading">
+				Downloading video... <span></span>
+				<div class="progress"><div></div></div>
+				You can continue using other websites, the video will continue downloading in the background.
+			</div>
+			<div id="submitting">
+				Creating your room... This shouldn't take longer than a minute.
+			</div>
+			<div id="serving">
+				Your room is ready, tell your friends!
+				<input type="text" readonly />
+				<div class="align">
+					<button>Stop sharing</button>
+					<div class="status"><span class="up"></span>/s &uarr; <span class="down"></span>/s &darr;</div>
+				</div>
+			</div>
+		</main>
+
+		<script src="../../js/filesize.min.js"></script>
+		<script src="../../js/timeago.min.js"></script>
+		<script src="browser_action.js"></script>
+	</body>
+</html>

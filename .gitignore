@@ -1,0 +1,5 @@
+node_modules/
+.serverless/
+public/build/
+extension/*.zip
+.DS_STORE

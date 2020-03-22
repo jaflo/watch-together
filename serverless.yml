@@ -1,0 +1,59 @@
+service: together
+
+provider:
+    name: aws
+    iamManagedPolicies:
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+    runtime: python3.7
+    timeout: 5
+    versionFunctions: false
+    logRetentionInDays: 3
+
+package:
+    exclude:
+        - "public/**"
+        - "extension/**"
+        - "src/**"
+        - "node_modules/**"
+        - "screenshots/**"
+
+functions:
+    connect:
+        handler: handlers.connect
+        events:
+            - websocket: $connect
+        environment:
+            SOCKET_CONNECTIONS: ${self:custom.tableName}
+    disconnect:
+        handler: handlers.disconnect
+        events:
+            - websocket: $disconnect
+        environment:
+            SOCKET_CONNECTIONS: ${self:custom.tableName}
+    fanout:
+        handler: handlers.message
+        events:
+            - websocket:
+                  route: fanout
+        environment:
+            SOCKET_CONNECTIONS: ${self:custom.tableName}
+
+resources:
+    Resources:
+        socketConnectionsTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                TableName: ${self:custom.tableName}
+                AttributeDefinitions:
+                    - AttributeName: connectionId
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: connectionId
+                      KeyType: HASH
+                BillingMode: PAY_PER_REQUEST
+                SSESpecification:
+                    SSEEnabled: true
+
+custom:
+    currentStage: ${opt:stage, self:provider.stage}
+    tableName: ${self:service}-${self:custom.currentStage}-participants
