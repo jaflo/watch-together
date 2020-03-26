@@ -6,6 +6,7 @@
 	export let file;
 	export let progress = 0;
 
+	const dispatch = createEventDispatcher();
 	let currentTime, duration, video, paused, wrapper, dummy;
 	let isFullscreen = false,
 		initSyncHappened = false,
@@ -37,6 +38,8 @@
 			}, 1000);
 			sendMessage("sync request");
 			setTimeout(forceSync, 5000);
+
+			dispatch("loaded");
 		});
 		video.play();
 		video.controls = false;
@@ -125,7 +128,7 @@
 
 <style>
 	.wrapper {
-		color: #faf0ca;
+		color: white;
 	}
 
 	.hidecursor {
@@ -157,7 +160,7 @@
 	.controls {
 		display: flex;
 		align-items: center;
-		margin-bottom: 4px;
+		padding-bottom: 4px;
 		opacity: 0;
 		transition: opacity 0.3s ease-in-out;
 	}
@@ -166,9 +169,28 @@
 		position: absolute;
 		left: 0;
 		right: 0;
-		bottom: -10px;
-		height: 100px;
+		bottom: 0;
+		height: 80px;
 		background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+		background: linear-gradient(
+			to bottom,
+			hsla(0, 0%, 0%, 0) 0%,
+			hsla(0, 0%, 0%, 0.009) 8.1%,
+			hsla(0, 0%, 0%, 0.034) 15.5%,
+			hsla(0, 0%, 0%, 0.073) 22.5%,
+			hsla(0, 0%, 0%, 0.123) 29%,
+			hsla(0, 0%, 0%, 0.181) 35.3%,
+			hsla(0, 0%, 0%, 0.246) 41.2%,
+			hsla(0, 0%, 0%, 0.315) 47.1%,
+			hsla(0, 0%, 0%, 0.385) 52.9%,
+			hsla(0, 0%, 0%, 0.454) 58.8%,
+			hsla(0, 0%, 0%, 0.519) 64.7%,
+			hsla(0, 0%, 0%, 0.577) 71%,
+			hsla(0, 0%, 0%, 0.627) 77.5%,
+			hsla(0, 0%, 0%, 0.666) 84.5%,
+			hsla(0, 0%, 0%, 0.691) 91.9%,
+			hsla(0, 0%, 0%, 0.7) 100%
+		);
 		content: "";
 		display: block;
 	}

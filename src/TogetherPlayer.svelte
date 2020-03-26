@@ -3,23 +3,42 @@
 
 	import Video from "./Video.svelte";
 
-	const client = new WebTorrent();
 	let file,
+		client,
 		upSpeed = 0,
 		downSpeed = 0,
-		progress = 0;
+		progress = 0,
+		loaded = false,
+		retryLoad,
+		backoff = 5000;
 
-	client.add(magnetLink, function(torrent) {
-		file = torrent.files[0];
+	function loadFile() {
+		file = null;
+		if (client) client.destroy();
 
-		function update() {
-			upSpeed = torrent.uploadSpeed;
-			downSpeed = torrent.downloadSpeed;
-			progress = torrent.progress;
-		}
-		torrent.on("download", update);
-		torrent.on("upload", update);
-	});
+		client = new WebTorrent();
+		client.add(magnetLink, function(torrent) {
+			file = torrent.files[0];
+
+			function update() {
+				upSpeed = torrent.uploadSpeed;
+				downSpeed = torrent.downloadSpeed;
+				progress = torrent.progress;
+			}
+			torrent.on("download", update);
+			torrent.on("upload", update);
+		});
+
+		retryLoad = setTimeout(loadFile, backoff);
+		backoff += 2000;
+	}
+
+	function loadCompleted() {
+		loaded = true;
+		clearTimeout(retryLoad);
+	}
+
+	loadFile();
 </script>
 
 <style>
@@ -47,7 +66,7 @@
 </style>
 
 {#if file}
-	<Video {file} {progress} />
+	<Video {file} {progress} on:loaded={loadCompleted} />
 {:else}
 	<div class="spinner" />
 {/if}
