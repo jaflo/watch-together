@@ -16,7 +16,7 @@
 		"svelte": "^3.0.0"
 	},
 	"dependencies": {
-		"serverless": "^1.66.0",
+		"serverless": "^3.25.1",
 		"sirv-cli": "^0.4.4"
 	}
 }
